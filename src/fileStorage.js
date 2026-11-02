@@ -1,11 +1,16 @@
 import { access, mkdir, readFile, writeFile } from 'fs/promises';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import os from 'os';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Папка пользователя, например:
+//   Linux/macOS: /home/username
+//   Windows:     C:\Users\username
+const HOME = os.homedir();
 
-const DATA_DIR = path.join(__dirname, '..', 'storage');
+// Скрытая папка приложения в домашней директории пользователя
+const DATA_DIR = path.join(HOME, '.todo-cli');
+
+// Один файл со всеми задачами
 const DATA_FILE = path.join(DATA_DIR, 'tasks.json');
 
 async function ensureStorage() {
@@ -30,4 +35,9 @@ export async function readTasks() {
 export async function writeTasks(tasks) {
   await ensureStorage();
   await writeFile(DATA_FILE, JSON.stringify(tasks, null, 2), 'utf-8');
+}
+
+// Полезно для отладки и для команды `where` (см. ниже)
+export function getStoragePath() {
+  return DATA_FILE;
 }
