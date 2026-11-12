@@ -26,5 +26,9 @@
     "undefsafe": "^2.0.3",
     "braces": "^3.0.3",
     "got": "11.8.5"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "pg": "^8.23.1"
   }
 }

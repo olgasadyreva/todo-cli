@@ -24,6 +24,10 @@ export async function handleCommand(argv) {
 
       case 'list': {
         const tasks = await service.listTasks();
+        if (tasks.length === 0) {
+          console.log('Список задач пуст');
+          break;
+        }
         console.log('Список задач:');
         tasks.forEach(task => {
           const statusRu = STATUS_TRANSLATIONS[task.status] || task.status;
@@ -38,6 +42,12 @@ export async function handleCommand(argv) {
         console.log(`Задача с идентификатором ${task.id}:`);
         console.log(`Название: ${task.title}`);
         console.log(`Статус: ${statusRu}`);
+        if (task.createdAt) {
+          console.log(`Создана: ${new Date(task.createdAt).toLocaleString()}`);
+        }
+        if (task.updatedAt) {
+          console.log(`Обновлена: ${new Date(task.updatedAt).toLocaleString()}`);
+        }
         break;
       }
 
@@ -83,7 +93,7 @@ export function printHelp() {
   list                      вывести список всех задач
   get <id>                  вывести информацию о задаче
   update <id> <newTask>     обновить название задачи
-  status <id> <newStatus>   обновить статус (В работе | Выполнена)
+  status <id> <newStatus>   обновить статус (todo | in-progress | done)
   delete <id>               удалить задачу
   help                      показать эту справку
   exit                      выйти из интерактивного режима
